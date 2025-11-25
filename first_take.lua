@@ -125,4 +125,100 @@ action({})
 
 -- It's a convetion to return a table usally called M for module 
 
+-- Functions: Multiple returns
+-- functions can return multiple values
+
+local returns_four_values = function()
+	return 1, 2, 3, 4
+end
+
+first, second, last = returns_four_values()
+
+-- Example 1
+print("first: ", first)
+print("second:", second)
+print("last:  ", last)
+-- the `4` is discarded :(
+
+-- Example 2
+local variable_arguments = function( ... )
+	local arguments = { ... }
+	for i, v in ipairs({ ... }) do print(i, v) end
+	return unpack(arguments)
+end
+
+print("=========================")
+print("1:", variable_arguments("Hello", "world", "!"))
+print("=========================")
+print("2:", variable_arguments("Hello", "world", "!"), "<lost>")
+
+-- String Shorthand
+local single_string = function(s)
+	return s .. " - WOW!"
+end
+
+local x = single_string("hi")
+local y = single_string "hi"
+print(x, y)
+
+-- Table Shorthand
+local setup = function(opts)
+	if opts.default == nil then
+		opts.default = 17
+	end
+
+	print(opts.default, opts.other)
+end
+
+setup { default = 12, other = false }
+setup { other = true }
+
+-- Functions: Colon Functions
+local MyTable = {}
+
+function MyTable.something(self, ... ) end
+functions MyTable:something( ... ) end     -- syntax sugar the use of : = the . and the self argument
+
+-- Metatables
+local vector_mt = {}
+vector_mt.__add = function(left, right)
+	return setmetatable({
+		left[1] + right[1],
+		left[2] + right[2],
+		left[3] + right[3],
+	}, vector_mt)
+end
+
+local v1 = setmetatable({ 3, 1, 5 }, vector_mt)
+local v2 = setmetatable({ -3, 2, 2 }, vector_mt)
+local v3 = v1 + v2
+vim.print(v3[1], v3[2], v3[3])
+vim.print(v3 + v3)
+
+-- Metatable 2
+local fib_mt = {
+	__index = function(self, key)
+		if key < 2 then return 1 end
+		-- Update the table, to save the intermediate results
+		self[key] = self[key - 2] + self[key - 1]
+		-- return the result
+		return self[key]
+	end
+}
+
+local fib = setmetatable({}, fib_mt)
+
+print(fib[5])
+print(fib[1000])
+
+-- Other notable fields:
+-- - `__newindex(self, key, value)`
+-- - `__call(self, ... ) `
+-- These can be overwritten
+
+-- Quick Neovim things for keymapping
+-- vim.keymap("n", "<space><space>x", "<cmd>source %<CR>")
+-- vim.keymap("n", "<space>x", ":.lua<CR>")
+-- vim.keymap("v", "space>x, ":lua<CR>")
+
 
