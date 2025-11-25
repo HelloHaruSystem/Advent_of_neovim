@@ -1,7 +1,23 @@
-print("Hello advent of neovim!");
-print("Hello, World");
+print("hello advent of neovim!");
+
+-- Key remaps
+-- space + space  + x to source
+vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
+-- Space + x to executes the current line of lua code 
+vim.keymap.set("n", "<space>x", ":.lua<CR>")
+-- Space + x in visual mode executes the currently selected block of lua code
+vim.keymap.set("v", "<space>x", ":lua<CR>")
 
 
-MyCoolFunction = function()
-	print("Hello");
-end
+-- Highlight when yanking (copying) text
+-- Try `yap` in normal mode
+-- help at `:help vim.highlight.on_yank()'
+vim.api.nvim_create_autocmd('TextYankPost', {
+	desc = 'Highlight when yanking (copying) text',
+	group = vim.api.nvim_create_augroup('kickstart-hightlight-yank', { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+
+
