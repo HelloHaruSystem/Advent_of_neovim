@@ -1,5 +1,7 @@
 print("hello advent of neovim!");
 
+require("config.lazy")
+
 -- Key remaps
 -- space + space  + x to source
 vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
