@@ -2,6 +2,9 @@ print("hello advent of neovim!");
 
 require("config.lazy")
 
+-- 4 space indentation
+vim.opt.shiftwidth = 4
+
 -- Key remaps
 -- space + space  + x to source
 vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
